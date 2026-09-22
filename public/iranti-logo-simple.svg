@@ -1,0 +1,50 @@
+<svg width="680" height="240" viewBox="0 0 680 240" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Ìrántí Registry logo — simple candle</title>
+<desc>Circular seal with a simple candle and flame, paired with the Ìrántí Registry wordmark</desc>
+<defs>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap');
+  </style>
+</defs>
+
+<g transform="translate(120,120)">
+  <g fill="#1E2A44">
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(0)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(22.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(45)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(67.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(90)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(112.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(135)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(157.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(180)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(202.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(225)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(247.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(270)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(292.5)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(315)"/>
+    <rect x="-5" y="-100" width="10" height="16" rx="2" transform="rotate(337.5)"/>
+  </g>
+  <circle r="88" fill="#1E2A44"/>
+  <circle r="80" fill="#B8923F"/>
+  <circle r="73" fill="#1E2A44"/>
+  <circle r="66" fill="#F7F3EA"/>
+  <g transform="translate(0, 12)">
+    <rect x="-28" y="34" width="56" height="7" rx="3" fill="#1E2A44"/>
+    <rect x="-13" y="-16" width="26" height="52" rx="4" fill="#1E2A44"/>
+    <path d="M -13,-4 Q -18,4 -16,10 Q -13,6 -13,0 Z" fill="#44567A"/>
+    <line x1="0" y1="-16" x2="0" y2="-24" stroke="#1E2A44" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 0,-26 C 3,-33 9,-39 7,-48 C 13,-39 12,-27 7,-22 C 12,-27 14,-37 12,-44 C 18,-32 15,-18 7,-14 C 4,-13 -4,-13 -7,-14 C -15,-18 -18,-32 -12,-44 C -14,-37 -12,-27 -7,-22 C -12,-27 -13,-39 -7,-48 C -9,-39 -3,-33 0,-26 Z" fill="#B8923F"/>
+    <ellipse cx="0" cy="-15" rx="10" ry="4" fill="#B8923F" opacity="0.3"/>
+  </g>
+</g>
+
+<text x="268" y="102" font-family="'Fraunces', Georgia, serif" font-size="66" font-weight="700" fill="#1E2A44" letter-spacing="-1">Ìrántí</text>
+<text x="272" y="140" font-family="'IBM Plex Mono', monospace" font-size="17" font-weight="500" fill="#B8923F" letter-spacing="10">REGISTRY</text>
+<line x1="268" y1="156" x2="614" y2="156" stroke="#E7E0D1" stroke-width="1"/>
+<text x="270" y="177" font-family="'IBM Plex Mono', monospace" font-size="11" fill="#97A1AC" letter-spacing="1.2">Nigeria's community-verified burial records</text>
+<circle cx="270" cy="198" r="3" fill="#B8923F"/>
+<circle cx="282" cy="198" r="3" fill="#1E2A44" opacity="0.3"/>
+<circle cx="294" cy="198" r="3" fill="#1E2A44" opacity="0.15"/>
+</svg>

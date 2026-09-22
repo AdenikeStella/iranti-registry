@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-ink: #1E2A44;
+  --color-ink-light: #44567A;
+  --color-parchment: #F7F3EA;
+  --color-line: #E7E0D1;
+  --color-brass: #B8923F;
+  --color-clay: #B5562F;
+  --color-moss: #55694C;
+  --color-slate: #97A1AC;
+
+  /* Typography */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-ibm-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), monospace;
+
+  /* Custom Font Size */
+  --text-2xs: 0.65rem;
+  --text-2xs--line-height: 1rem;
+  --text-2xs--letter-spacing: 0.08em;
+
+  /* Border Radii */
+  --radius-default: 6px;
+  --radius-card: 10px;
+  --radius-badge: 9999px;
+
+  /* Box Shadows */
+  --shadow-card: 0 4px 24px rgba(30, 42, 68, 0.08);
+  --shadow-card-hover: 0 6px 24px rgba(30, 42, 68, 0.14);
+  --shadow-modal: 0 20px 60px rgba(30, 42, 68, 0.25);
+
+  /* Spacing & Max Width */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --max-width-content: 68rem;
+
+  /* Keyframes & Animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
+}
+
+/* ============================================================
+   BASE RESETS
+   These apply directly to HTML elements.
+   ============================================================ */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-parchment text-ink font-sans;
+    min-height: 100dvh;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold leading-tight tracking-tight;
+  }
+
+  h1 { @apply text-4xl; }
+  h2 { @apply text-3xl; }
+  h3 { @apply text-2xl; }
+  h4 { @apply text-xl; }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply text-ink transition-colors duration-150;
+  }
+
+  img, svg {
+    display: block;
+  }
+
+  input, select, textarea {
+    @apply font-sans;
+  }
+
+  button {
+    @apply font-sans cursor-pointer;
+  }
+}
+
+/* ============================================================
+   CUSTOM UTILITIES (Tailwind v4 Directive)
+   These replace old .class structures that use @apply.
+   ============================================================ */
+
+/* ---- Buttons ---- */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 
+         rounded px-5 py-2.5 text-sm font-medium 
+         transition-all duration-150 select-none;
+}
+
+@utility btn-primary {
+  @apply btn bg-ink text-parchment 
+         hover:bg-ink-light active:scale-[0.98];
+}
+
+@utility btn-outline {
+  @apply btn border border-ink text-ink bg-transparent 
+         hover:bg-ink hover:text-parchment active:scale-[0.98];
+}
+
+@utility btn-ghost {
+  @apply btn text-ink-light bg-transparent 
+         hover:bg-line active:scale-[0.98];
+}
+
+@utility btn-sm {
+  @apply px-3 py-1.5 text-xs;
+}
+
+/* ---- Form inputs ---- */
+@utility input {
+  @apply w-full border border-line rounded bg-white 
+         px-3 py-2.5 text-sm text-ink placeholder:text-slate
+         focus:outline-none focus:ring-2 focus:ring-ink/20 
+         focus:border-ink-light transition-colors duration-150;
+}
+
+@utility label {
+  @apply block font-mono text-2xs uppercase tracking-widest 
+         text-slate mb-1.5;
+}
+
+/* ---- Cards ---- */
+@utility card {
+  @apply bg-white border border-line rounded-card 
+         shadow-card transition-shadow duration-150;
+}
+
+@utility card-hover {
+  @apply card hover:shadow-card-hover;
+}
+
+/* ---- Status badges ---- */
+@utility badge {
+  @apply inline-flex items-center gap-1 px-2 py-0.5 
+         rounded-badge text-xs font-mono font-medium uppercase tracking-wide;
+}
+
+@utility badge-pending {
+  @apply badge bg-brass/10 text-brass border border-brass/20;
+}
+
+@utility badge-verified {
+  @apply badge bg-moss/10 text-moss border border-moss/20;
+}
+
+@utility badge-rejected {
+  @apply badge bg-clay/10 text-clay border border-clay/20;
+}
+
+/* ---- Info rows ---- */
+@utility info-row {
+  @apply flex justify-between items-center gap-4 
+         px-5 py-3.5 border-b border-line last:border-b-0;
+}
+
+@utility info-row-label {
+  @apply text-ink-light text-sm;
+}
+
+@utility info-row-value {
+  @apply font-medium text-sm text-right;
+}
+
+/* ---- Sealed / locked row ---- */
+@utility info-row-sealed {
+  @apply info-row bg-parchment;
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(151, 161, 172, 0.1) 0px,
+    rgba(151, 161, 172, 0.1) 2px,
+    transparent 2px,
+    transparent 9px
+  );
+}
+
+@utility sealed-value {
+  @apply flex items-center gap-1.5 text-slate 
+         font-mono text-2xs uppercase tracking-widest;
+}
+
+/* ---- Eyebrows & Dividers ---- */
+@utility eyebrow {
+  @apply font-mono text-2xs uppercase tracking-widest text-slate;
+}
+
+@utility divider {
+  @apply border-t border-line my-8;
+}
+
+/* ---- Access status banners ---- */
+@utility banner {
+  @apply rounded-card px-4 py-3.5 flex items-start gap-3 text-sm;
+}
+
+@utility banner-pending {
+  @apply banner bg-brass/10 border border-brass/25;
+}
+
+@utility banner-denied {
+  @apply banner bg-clay/10 border border-clay/25;
+}
+
+@utility banner-approved {
+  @apply banner bg-moss/10 border border-moss/25;
+}
+
+/* ---- Page container ---- */
+@utility container-content {
+  @apply max-w-content mx-auto px-4 sm:px-6;
+}
+
+/* ---- Modal overlay & card ---- */
+@utility modal-overlay {
+  @apply fixed inset-0 bg-ink/50 flex items-center 
+         justify-center p-4 z-50;
+}
+
+@utility modal-card {
+  @apply bg-parchment border border-line rounded-card 
+         shadow-modal max-w-md w-full p-6 animate-slide-up;
+}
+
+/* ---- Other Misc Utilities ---- */
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
