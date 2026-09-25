@@ -7,22 +7,58 @@ import { useState } from "react";
 import { FileUploadCard } from "../components/fileUpload";
 import { Checkbox } from "../components/checkbox";
 import { z } from "zod";
-import {useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+const nameRegex = /^[a-zA-Z\s'-]+$/;
+const numberRegex = /^\+[0-9]+$/;
+
 const formSchema = z.object({
-    fullName: z.string().min(1, "Full name is required"),
-    applicantFullName: z.string().min(1, "Your full name is required"),
-    careTakerName: z.string().min(1, "caretaker name is required"),
-applicantEmail: z.string().email("invalid email address"),
-applicantPhoneNumber: z.string().min(11, "enter a valid phone number"),
-careTakerPhoneNumber: z.string().min(11, "enter a valid phone number"),
-dateOfBirth: z.string().min(1, "Date of Birth is required").refine((date) => new Date(date) <= new Date(), { message: "Date of birth cannot be in the future",}),
-dateOfDeath: z.string().min(1, "Date of Death is required").refine((date) => new Date(date) <= new Date(), { message: "Date of death cannot be in the future",}),
-  })
+  fullName: z
+    .string()
+    .min(1, "Full name is required")
+    .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
+    nee: z.string().regex(nameRegex, "Nee should only contain letters, spaces, and hyphens"),
+  applicantFullName: z
+    .string()
+    .min(1, "Your full name is required")
+    .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
+  careTakerName: z
+    .string()
+    .min(1, "caretaker name is required")
+    .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
+  applicantEmail: z.string().email("invalid email address"),
+  applicantPhoneNumber: z
+    .string()
+    .min(11, "enter a valid phone number")
+    .regex(numberRegex, "Phone number should only contain digits and +"),
+  careTakerPhoneNumber: z
+    .string()
+    .min(11, "enter a valid phone number")
+    .regex(numberRegex, "Phone number should only contain digits and +"),
+  dateOfBirth: z
+    .string()
+    .min(1, "Date of Birth is required")
+    .refine((date) => new Date(date) <= new Date(), {
+      message: "Date of birth cannot be in the future",
+    }),
+  dateOfDeath: z
+    .string()
+    .min(1, "Date of Death is required")
+    .refine((date) => new Date(date) <= new Date(), {
+      message: "Date of death cannot be in the future",
+    }),
+  lga: z
+    .string()
+    .min(2, "LGA is required")
+    .regex(nameRegex, "LGA should only contain letters, spaces and hyphens"),
+  burialSite: z
+    .string()
+    .min(2, "Burial site is required")
+    .regex(/^[a-zA-Z0-9\s,.'-]+$/, "Contains invalid characters"),
+});
 
-  type FormValues = z.infer<typeof formSchema>
-
+type FormValues = z.infer<typeof formSchema>;
 
 export default function SubmitPage() {
   const [naijaStates, setNaijaStates] = useState<NigerianState | "">("");
@@ -35,26 +71,32 @@ export default function SubmitPage() {
   const [applicationData, setapplicationData] = useState({});
 
   const {
-    register, 
+    register,
     handleSubmit,
-    formState: { errors},
+    setValue,
+    formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-  })
+  });
+
+  const sanitizeName = (value: string) => value.replace(/[^a-zA-Z\s'-]/g, "");
+  const sanitizePhone = (value: string) => value.replace(/[^0-9+]/g, "");
+  const sanitizeBurialSite = (value: string) =>
+  value.replace(/[^a-zA-Z0-9\s,.'-]/g, "");
 
   const onSubmit = (data: FormValues) => {
-    const fullPayload = { 
-      ...data, 
+    const fullPayload = {
+      ...data,
       stateOfDeath: naijaStates,
-    relationship: yourRelationship,
-    deathCert,
-    validId,
-    burialPermit,};
+      relationship: yourRelationship,
+      deathCert,
+      validId,
+      burialPermit,
+    };
     setSuccessModal(true);
     setapplicationData(fullPayload);
     console.log(fullPayload);
-  }
-  
+  };
 
   return (
     <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
@@ -118,11 +160,17 @@ export default function SubmitPage() {
                 required
                 type="text"
                 {...register("fullName")}
+                onChange={(e) => {
+                  const cleaned = sanitizeName(e.target.value);
+                  setValue("fullName", cleaned, {shouldValidate: true})
+                }}
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
               {errors.fullName && (
-    <p className="text-clay text-xs mt-1">{errors.fullName.message}</p>
-  )}
+                <p className="text-clay text-xs mt-1">
+                  {errors.fullName.message}
+                </p>
+              )}
             </span>
 
             <span className="flex flex-col mb-5">
@@ -136,8 +184,18 @@ export default function SubmitPage() {
                 id="nee"
                 placeholder="nee"
                 type="text"
+                {...register("nee")}
+                onChange={(e) => {
+                  const cleaned = sanitizeName(e.target.value);
+                  setValue("nee", cleaned, {shouldValidate: true})
+                }}
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
+              {errors.nee && (
+                <p className="text-clay text-xs mt-1">
+                  {errors.nee.message}
+                </p>
+              )}
             </span>
 
             <div className="flex flex-col md:flex-row w-full justify-between gap-3">
@@ -157,8 +215,10 @@ export default function SubmitPage() {
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.dateOfBirth && (
-    <p className="text-clay text-xs mt-1">{errors.dateOfBirth.message}</p>
-  )}
+                  <p className="text-clay text-xs mt-1">
+                    {errors.dateOfBirth.message}
+                  </p>
+                )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
@@ -172,13 +232,15 @@ export default function SubmitPage() {
                   id="dateOfDeath"
                   placeholder="dd/mm/yyyy"
                   required
-                                    {...register("dateOfDeath")}
+                  {...register("dateOfDeath")}
                   type="date"
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.dateOfDeath && (
-    <p className="text-clay text-xs mt-1">{errors.dateOfDeath.message}</p>
-  )}
+                  <p className="text-clay text-xs mt-1">
+                    {errors.dateOfDeath.message}
+                  </p>
+                )}
               </span>
             </div>
 
@@ -221,8 +283,18 @@ export default function SubmitPage() {
                   placeholder="eg.ikeja"
                   required
                   type="text"
+                  {...register("lga")}
+                  onChange={(e) => {
+                    const cleaned = sanitizeName(e.target.value);
+                    setValue("lga", cleaned, {shouldValidate: true})
+                  }}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
+                {errors.lga && (
+                <p className="text-clay text-xs mt-1">
+                  {errors.lga.message}
+                </p>
+              )}
               </span>
             </div>
 
@@ -237,9 +309,19 @@ export default function SubmitPage() {
                 id="burialSite"
                 placeholder="e.g. Vaults & Gardens Cemetery, Lagos"
                 required
+                {...register("burialSite")}
+                onChange={(e) => {
+                  const cleaned = sanitizeBurialSite (e.target.value);
+                  setValue("burialSite", cleaned, {shouldValidate: true})
+                }}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
+              {errors.burialSite && (
+                <p className="text-clay text-xs mt-1">
+                  {errors.burialSite.message}
+                </p>
+              )}
             </span>
 
             <span className="flex flex-col mb-5">
@@ -286,12 +368,18 @@ export default function SubmitPage() {
                 placeholder="Name of the cemetery caretaker"
                 required
                 {...register("careTakerName")}
+                onChange={(e) => {
+                  const cleaned = sanitizeName(e.target.value);
+                  setValue("careTakerName", cleaned, {shouldValidate: true})
+                }}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
               {errors.careTakerName && (
-    <p className="text-clay text-xs mt-1">{errors.careTakerName.message}</p>
-  )}
+                <p className="text-clay text-xs mt-1">
+                  {errors.careTakerName.message}
+                </p>
+              )}
             </span>
 
             <span className="flex flex-col mb-5 border-b border-line pb-10">
@@ -309,12 +397,18 @@ export default function SubmitPage() {
                 placeholder="phone number of the cemetery caretaker"
                 required
                 {...register("careTakerPhoneNumber")}
+                onChange={(e) => {
+                  const cleaned = sanitizePhone(e.target.value);
+                  setValue("careTakerPhoneNumber", cleaned, {shouldValidate: true})
+                }}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
               {errors.careTakerPhoneNumber && (
-    <p className="text-clay text-xs mt-1">{errors.careTakerPhoneNumber.message}</p>
-  )}
+                <p className="text-clay text-xs mt-1">
+                  {errors.careTakerPhoneNumber.message}
+                </p>
+              )}
             </span>
 
             <div className="flex border-b border-line mb-5 pb-3 mt-3 font-serif font-semibold text-ink text-lg">
@@ -334,12 +428,18 @@ export default function SubmitPage() {
                   placeholder="applicant full name"
                   required
                   type="text"
-                                    {...register("applicantFullName")}
+                  {...register("applicantFullName")}
+                  onChange={(e) => {
+                    const cleaned = sanitizeName(e.target.value);
+                    setValue("applicantFullName", cleaned, {shouldValidate: true})
+                  }}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.applicantFullName && (
-    <p className="text-clay text-xs mt-1">{errors.applicantFullName.message}</p>
-  )}
+                  <p className="text-clay text-xs mt-1">
+                    {errors.applicantFullName.message}
+                  </p>
+                )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
@@ -383,8 +483,10 @@ export default function SubmitPage() {
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.applicantEmail && (
-    <p className="text-clay text-xs mt-1">{errors.applicantEmail.message}</p>
-  )}
+                  <p className="text-clay text-xs mt-1">
+                    {errors.applicantEmail.message}
+                  </p>
+                )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
@@ -400,12 +502,18 @@ export default function SubmitPage() {
                   required
                   type="tel"
                   {...register("applicantPhoneNumber")}
+                  onChange={(e) => {
+                    const cleaned = sanitizePhone(e.target.value);
+                    setValue("applicantPhoneNumber", cleaned, {shouldValidate: true})
+                  }}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
               </span>
               {errors.applicantPhoneNumber && (
-    <p className="text-clay text-xs mt-1">{errors.applicantPhoneNumber.message}</p>
-  )}
+                <p className="text-clay text-xs mt-1">
+                  {errors.applicantPhoneNumber.message}
+                </p>
+              )}
             </div>
 
             <div className="flex border-b border-line mb-5 pb-3 mt-3 font-serif font-semibold text-ink text-lg">
@@ -465,16 +573,20 @@ export default function SubmitPage() {
                 }
               />
             </span>
+            {!agreed && (
+                <p className="text-clay text-xs mt-1">
+                  Kindly agree to terms and privacy policy to continue
+                </p>
+              )}
             <button
-          type="submit"
-            // onClick={() => setSuccessModal(true)}
-            className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
-          >
-            Submit Memorial for Review
-          </button>
+              type="submit"
+              // onClick={() => setSuccessModal(true)}
+              className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
+            >
+              Submit Memorial for Review
+            </button>
           </form>
 
-          
           <p className="text-slate font-sans text-xs mt-1.5 flex">
             Your memorial will not appear publicly until our team verifies your
             documents — usually within 2–3 days.
@@ -484,8 +596,8 @@ export default function SubmitPage() {
 
       <section>
         <pre className="text-xs whitespace-pre-wrap">
-  {JSON.stringify(applicationData, null, 2)}
-</pre>
+          {JSON.stringify(applicationData, null, 2)}
+        </pre>
       </section>
 
       {successModal && (
@@ -512,10 +624,15 @@ export default function SubmitPage() {
             </div>
 
             <div className="flex flex-row w-full font-medium text-sm items-center justify-center mx-auto gap-3">
-                <Link href="/paystack" className="flex btn-outline px-5.5 py-3"> My dashboard</Link>
-                                <Link href="/search" className="flex btn-primary px-5.5 py-3"> Search Registry</Link>
-
-              </div>
+              <Link href="/paystack" className="flex btn-outline px-5.5 py-3">
+                {" "}
+                My dashboard
+              </Link>
+              <Link href="/search" className="flex btn-primary px-5.5 py-3">
+                {" "}
+                Search Registry
+              </Link>
+            </div>
           </div>
         </div>
       )}
