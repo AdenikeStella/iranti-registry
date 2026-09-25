@@ -6,6 +6,23 @@ import { nigerianStates, type NigerianState } from "../data/states";
 import { useState } from "react";
 import { FileUploadCard } from "../components/fileUpload";
 import { Checkbox } from "../components/checkbox";
+import { z } from "zod";
+import {useForm} from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const formSchema = z.object({
+    fullName: z.string().min(1, "Full name is required"),
+    applicantFullName: z.string().min(1, "Your full name is required"),
+    careTakerName: z.string().min(1, "caretaker name is required"),
+applicantEmail: z.string().email("invalid email address"),
+applicantPhoneNumber: z.string().min(11, "enter a valid phone number"),
+careTakerPhoneNumber: z.string().min(11, "enter a valid phone number"),
+dateOfBirth: z.string().min(1, "Date of Birth is required").refine((date) => new Date(date) <= new Date(), { message: "Date of birth cannot be in the future",}),
+dateOfDeath: z.string().min(1, "Date of Death is required").refine((date) => new Date(date) <= new Date(), { message: "Date of death cannot be in the future",}),
+  })
+
+  type FormValues = z.infer<typeof formSchema>
+
 
 export default function SubmitPage() {
   const [naijaStates, setNaijaStates] = useState<NigerianState | "">("");
@@ -15,6 +32,29 @@ export default function SubmitPage() {
   const [burialPermit, setBurialPermit] = useState<File | null>(null);
   const [agreed, setAgreed] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
+  const [applicationData, setapplicationData] = useState({});
+
+  const {
+    register, 
+    handleSubmit,
+    formState: { errors},
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+  })
+
+  const onSubmit = (data: FormValues) => {
+    const fullPayload = { 
+      ...data, 
+      stateOfDeath: naijaStates,
+    relationship: yourRelationship,
+    deathCert,
+    validId,
+    burialPermit,};
+    setSuccessModal(true);
+    setapplicationData(fullPayload);
+    console.log(fullPayload);
+  }
+  
 
   return (
     <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
@@ -64,7 +104,7 @@ export default function SubmitPage() {
           <div className="flex border-b border-line mb-5 pb-3 mt-3 font-serif font-semibold text-ink text-lg">
             About the deceased
           </div>
-          <form action="">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <span className="flex flex-col mb-5">
               <label
                 htmlFor="fullName"
@@ -77,8 +117,12 @@ export default function SubmitPage() {
                 placeholder="full name"
                 required
                 type="text"
+                {...register("fullName")}
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
+              {errors.fullName && (
+    <p className="text-clay text-xs mt-1">{errors.fullName.message}</p>
+  )}
             </span>
 
             <span className="flex flex-col mb-5">
@@ -99,34 +143,42 @@ export default function SubmitPage() {
             <div className="flex flex-col md:flex-row w-full justify-between gap-3">
               <span className="flex flex-col mb-5 w-full">
                 <label
-                  htmlFor="dateofbirth"
+                  htmlFor="dateOfBirth"
                   className="text-slate uppercase font-mono text-xs mb-1.5"
                 >
                   date of birth <span className="text-clay">*</span>
                 </label>
                 <input
-                  id="nee"
+                  id="dateOfBirth"
                   placeholder="dd/mm/yyyy"
                   required
+                  {...register("dateOfBirth")}
                   type="date"
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
+                {errors.dateOfBirth && (
+    <p className="text-clay text-xs mt-1">{errors.dateOfBirth.message}</p>
+  )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
                 <label
-                  htmlFor="nee"
+                  htmlFor="dateOfDeath"
                   className="text-slate uppercase font-mono text-xs mb-1.5"
                 >
                   date of death <span className="text-clay">*</span>
                 </label>
                 <input
-                  id="nee"
+                  id="dateOfDeath"
                   placeholder="dd/mm/yyyy"
                   required
+                                    {...register("dateOfDeath")}
                   type="date"
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
+                {errors.dateOfDeath && (
+    <p className="text-clay text-xs mt-1">{errors.dateOfDeath.message}</p>
+  )}
               </span>
             </div>
 
@@ -221,21 +273,48 @@ export default function SubmitPage() {
 
             <span className="flex flex-col mb-5 border-b border-line pb-10">
               <label
-                htmlFor="caretakerContact"
+                htmlFor="caretakerName"
                 className="text-slate uppercase font-mono text-xs mb-1.5 flex"
               >
-                caretaker contact{" "}
+                caretaker Name{" "}
                 <span className="border border-brass bg-parchment rounded-md text-xs text-clay ml-3 py-0.5 px-2 flex">
                   sealed
                 </span>
               </label>
               <input
-                id="caretakerContact"
-                placeholder="Name and phone number of the cemetery caretaker"
+                id="caretakerName"
+                placeholder="Name of the cemetery caretaker"
                 required
+                {...register("careTakerName")}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
+              {errors.careTakerName && (
+    <p className="text-clay text-xs mt-1">{errors.careTakerName.message}</p>
+  )}
+            </span>
+
+            <span className="flex flex-col mb-5 border-b border-line pb-10">
+              <label
+                htmlFor="caretakerPhoneNumber"
+                className="text-slate uppercase font-mono text-xs mb-1.5 flex"
+              >
+                caretaker phone Number{" "}
+                <span className="border border-brass bg-parchment rounded-md text-xs text-clay ml-3 py-0.5 px-2 flex">
+                  sealed
+                </span>
+              </label>
+              <input
+                id="caretakerPhoneNumber"
+                placeholder="phone number of the cemetery caretaker"
+                required
+                {...register("careTakerPhoneNumber")}
+                type="text"
+                className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
+              />
+              {errors.careTakerPhoneNumber && (
+    <p className="text-clay text-xs mt-1">{errors.careTakerPhoneNumber.message}</p>
+  )}
             </span>
 
             <div className="flex border-b border-line mb-5 pb-3 mt-3 font-serif font-semibold text-ink text-lg">
@@ -245,18 +324,22 @@ export default function SubmitPage() {
             <div className="flex flex-col md:flex-row w-full justify-between gap-3">
               <span className="flex flex-col mb-5 w-full">
                 <label
-                  htmlFor="applicantFullname"
+                  htmlFor="applicantFullName"
                   className="text-slate uppercase font-mono text-xs mb-1.5"
                 >
                   applicant Full name <span className="text-clay">*</span>
                 </label>
                 <input
-                  id="applicantFullname"
-                  placeholder="full name"
+                  id="applicantFullName"
+                  placeholder="applicant full name"
                   required
                   type="text"
+                                    {...register("applicantFullName")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
+                {errors.applicantFullName && (
+    <p className="text-clay text-xs mt-1">{errors.applicantFullName.message}</p>
+  )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
@@ -286,35 +369,43 @@ export default function SubmitPage() {
             <div className="flex flex-col md:flex-row w-full justify-between gap-3 border-b border-line pb-5">
               <span className="flex flex-col mb-5 w-full">
                 <label
-                  htmlFor="email"
+                  htmlFor="applicantEmail"
                   className="text-slate uppercase font-mono text-xs mb-1.5"
                 >
                   Apllicant email address <span className="text-clay">*</span>
                 </label>
                 <input
-                  id="email"
+                  id="applicantEmail"
                   placeholder="abd@hello.com"
                   required
                   type="email"
+                  {...register("applicantEmail")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
+                {errors.applicantEmail && (
+    <p className="text-clay text-xs mt-1">{errors.applicantEmail.message}</p>
+  )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
                 <label
-                  htmlFor="phoneNumber"
+                  htmlFor="applicantPhoneNumber"
                   className="text-slate uppercase font-mono text-xs mb-1.5"
                 >
                   phone number <span className="text-clay">*</span>
                 </label>
                 <input
-                  id="phoneNumber"
+                  id="applicantPhoneNumber"
                   placeholder="081234567890"
                   required
                   type="tel"
+                  {...register("applicantPhoneNumber")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
               </span>
+              {errors.applicantPhoneNumber && (
+    <p className="text-clay text-xs mt-1">{errors.applicantPhoneNumber.message}</p>
+  )}
             </div>
 
             <div className="flex border-b border-line mb-5 pb-3 mt-3 font-serif font-semibold text-ink text-lg">
@@ -374,14 +465,16 @@ export default function SubmitPage() {
                 }
               />
             </span>
-          </form>
-
-          <button
-            onClick={() => setSuccessModal(true)}
+            <button
+          type="submit"
+            // onClick={() => setSuccessModal(true)}
             className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
           >
             Submit Memorial for Review
           </button>
+          </form>
+
+          
           <p className="text-slate font-sans text-xs mt-1.5 flex">
             Your memorial will not appear publicly until our team verifies your
             documents — usually within 2–3 days.
@@ -389,11 +482,17 @@ export default function SubmitPage() {
         </div>
       </section>
 
+      <section>
+        <pre className="text-xs whitespace-pre-wrap">
+  {JSON.stringify(applicationData, null, 2)}
+</pre>
+      </section>
+
       {successModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm px-4">
           <div className="bg-white rounded-2xl shadow-lg w-full max-w-166.5 h-auto max-h-[min(99vh,625px)] overflow-y-auto flex flex-col py-5 px-2 md:py-14 md:px-6 items-center justify-center">
             <div className="flex w-18 h-18 rounded-full border-2 border-[#7FAF78] bg-[#EDF4EC] mx-auto p-6">
-              <Check className="w-8 h-8 text-" />
+              <Check className="w-8 h-8 text-ink" />
             </div>
             <h2 className="my-3 font-serif text-ink text-2xl md:text-4xl font-bold mx-auto text-center">
               Memorial submitted
@@ -413,7 +512,7 @@ export default function SubmitPage() {
             </div>
 
             <div className="flex flex-row w-full font-medium text-sm items-center justify-center mx-auto gap-3">
-                <Link href="/" className="flex btn-outline px-5.5 py-3"> My dashboard</Link>
+                <Link href="/paystack" className="flex btn-outline px-5.5 py-3"> My dashboard</Link>
                                 <Link href="/search" className="flex btn-primary px-5.5 py-3"> Search Registry</Link>
 
               </div>
