@@ -733,7 +733,7 @@ export default function SubmitPage() {
             </div>
 
             <div className="flex flex-row w-full font-medium text-sm items-center justify-center mx-auto gap-3">
-              <Link href="/paystack" className="flex btn-outline px-5.5 py-3">
+              <Link href="/" className="flex btn-outline px-5.5 py-3">
                 {" "}
                 My dashboard
               </Link>
