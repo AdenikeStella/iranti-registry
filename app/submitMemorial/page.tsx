@@ -4,21 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { nigerianStates, type NigerianState } from "../data/states";
 import { useState } from "react";
-import { FileUploadCard } from "../components/fileUpload";
 import { Checkbox } from "../components/checkbox";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FileUploadCardPractice } from "../components/fileUploadPractice";
+import { relations, type relationStatus } from "../data/relationship";
 
 const nameRegex = /^[a-zA-Z\s'-]+$/;
-const numberRegex = /^\+[0-9]+$/;
+const phoneRegex = /^(\+234|0)[0-9]{10}$/;
 
 const formSchema = z.object({
   fullName: z
     .string()
     .min(1, "Full name is required")
     .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
-    nee: z.string().regex(nameRegex, "Nee should only contain letters, spaces, and hyphens"),
+  nee: z.string().regex(nameRegex, "...").optional().or(z.literal("")),
   applicantFullName: z
     .string()
     .min(1, "Your full name is required")
@@ -31,11 +32,11 @@ const formSchema = z.object({
   applicantPhoneNumber: z
     .string()
     .min(11, "enter a valid phone number")
-    .regex(numberRegex, "Phone number should only contain digits and +"),
+    .regex(phoneRegex, "Enter a valid Nigerian phone number"),
   careTakerPhoneNumber: z
     .string()
     .min(11, "enter a valid phone number")
-    .regex(numberRegex, "Phone number should only contain digits and +"),
+    .regex(phoneRegex, "Enter a valid Nigerian phone number"),
   dateOfBirth: z
     .string()
     .min(1, "Date of Birth is required")
@@ -56,46 +57,59 @@ const formSchema = z.object({
     .string()
     .min(2, "Burial site is required")
     .regex(/^[a-zA-Z0-9\s,.'-]+$/, "Contains invalid characters"),
+  stateOfDeath: z.string().min(1, "Select a state"),
+  relationship: z.string().min(1, "Select your relationship"),
+  biography: z
+    .string()
+    .min(1, "A short biography is required")
+    .optional()
+    .or(z.literal("")),
+  agreed: z.boolean().refine((v) => v === true, {
+    message: "Kindly agree to the terms and privacy policy to continue",
+  }),
+  deathCert: z.custom<File>(
+    (f) => f instanceof File,
+    "Death certificate is required",
+  ),
+  validId: z.custom<File>((f) => f instanceof File, "Valid ID is required"),
+  burialPermit: z.custom<File | null>().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
+const today = (() => {
+  const d = new Date();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${month}-${day}`;
+})();
+
 export default function SubmitPage() {
-  const [naijaStates, setNaijaStates] = useState<NigerianState | "">("");
-  const [yourRelationship, setYourRelationship] = useState("");
-  const [deathCert, setDeathCert] = useState<File | null>(null);
-  const [validId, setValidId] = useState<File | null>(null);
-  const [burialPermit, setBurialPermit] = useState<File | null>(null);
-  const [agreed, setAgreed] = useState(false);
   const [successModal, setSuccessModal] = useState(false);
-  const [applicationData, setapplicationData] = useState({});
+  const [applicationData, setapplicationData] = useState<FormValues | null>(
+    null,
+  );
 
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    defaultValues: { agreed: false },
   });
+
+  const agreed = watch("agreed");
 
   const sanitizeName = (value: string) => value.replace(/[^a-zA-Z\s'-]/g, "");
   const sanitizePhone = (value: string) => value.replace(/[^0-9+]/g, "");
   const sanitizeBurialSite = (value: string) =>
-  value.replace(/[^a-zA-Z0-9\s,.'-]/g, "");
+    value.replace(/[^a-zA-Z0-9\s,.'-]/g, "");
 
   const onSubmit = (data: FormValues) => {
-    const fullPayload = {
-      ...data,
-      stateOfDeath: naijaStates,
-      relationship: yourRelationship,
-      deathCert,
-      validId,
-      burialPermit,
-    };
-    setSuccessModal(true);
-    setapplicationData(fullPayload);
-    console.log(fullPayload);
+    setapplicationData(data);
   };
 
   return (
@@ -146,7 +160,7 @@ export default function SubmitPage() {
           <div className="flex border-b border-line mb-5 pb-3 mt-3 font-serif font-semibold text-ink text-lg">
             About the deceased
           </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <span className="flex flex-col mb-5">
               <label
                 htmlFor="fullName"
@@ -157,12 +171,11 @@ export default function SubmitPage() {
               <input
                 id="fullName"
                 placeholder="full name"
-                required
                 type="text"
                 {...register("fullName")}
                 onChange={(e) => {
                   const cleaned = sanitizeName(e.target.value);
-                  setValue("fullName", cleaned, {shouldValidate: true})
+                  setValue("fullName", cleaned, { shouldValidate: true });
                 }}
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
@@ -187,14 +200,12 @@ export default function SubmitPage() {
                 {...register("nee")}
                 onChange={(e) => {
                   const cleaned = sanitizeName(e.target.value);
-                  setValue("nee", cleaned, {shouldValidate: true})
+                  setValue("nee", cleaned, { shouldValidate: true });
                 }}
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
               {errors.nee && (
-                <p className="text-clay text-xs mt-1">
-                  {errors.nee.message}
-                </p>
+                <p className="text-clay text-xs mt-1">{errors.nee.message}</p>
               )}
             </span>
 
@@ -209,9 +220,9 @@ export default function SubmitPage() {
                 <input
                   id="dateOfBirth"
                   placeholder="dd/mm/yyyy"
-                  required
                   {...register("dateOfBirth")}
                   type="date"
+                  max= {today}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.dateOfBirth && (
@@ -231,9 +242,9 @@ export default function SubmitPage() {
                 <input
                   id="dateOfDeath"
                   placeholder="dd/mm/yyyy"
-                  required
                   {...register("dateOfDeath")}
                   type="date"
+                  max= {today}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.dateOfDeath && (
@@ -256,10 +267,7 @@ export default function SubmitPage() {
 
                 <select
                   id="stateofdeath"
-                  value={naijaStates}
-                  onChange={(e) =>
-                    setNaijaStates(e.target.value as NigerianState | "")
-                  }
+                  {...register("stateOfDeath")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 >
                   <option value=""> Select state</option>
@@ -269,6 +277,11 @@ export default function SubmitPage() {
                     </option>
                   ))}
                 </select>
+                {errors.stateOfDeath && (
+                  <p className="text-clay text-xs mt-1">
+                    {errors.stateOfDeath.message}
+                  </p>
+                )}
               </span>
 
               <span className="flex flex-col mb-5 w-full">
@@ -281,20 +294,17 @@ export default function SubmitPage() {
                 <input
                   id="lga"
                   placeholder="eg.ikeja"
-                  required
                   type="text"
                   {...register("lga")}
                   onChange={(e) => {
                     const cleaned = sanitizeName(e.target.value);
-                    setValue("lga", cleaned, {shouldValidate: true})
+                    setValue("lga", cleaned, { shouldValidate: true });
                   }}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
                 {errors.lga && (
-                <p className="text-clay text-xs mt-1">
-                  {errors.lga.message}
-                </p>
-              )}
+                  <p className="text-clay text-xs mt-1">{errors.lga.message}</p>
+                )}
               </span>
             </div>
 
@@ -308,11 +318,10 @@ export default function SubmitPage() {
               <input
                 id="burialSite"
                 placeholder="e.g. Vaults & Gardens Cemetery, Lagos"
-                required
                 {...register("burialSite")}
                 onChange={(e) => {
-                  const cleaned = sanitizeBurialSite (e.target.value);
-                  setValue("burialSite", cleaned, {shouldValidate: true})
+                  const cleaned = sanitizeBurialSite(e.target.value);
+                  setValue("burialSite", cleaned, { shouldValidate: true });
                 }}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
@@ -329,14 +338,14 @@ export default function SubmitPage() {
                 htmlFor="biography"
                 className="text-slate uppercase font-mono text-xs mb-1.5 flex"
               >
-                short biography <span className="text-clay">*</span>
+                short biography
               </label>
 
               <textarea
                 id="biography"
                 placeholder="A brief tribute — who they were, what they meant to people who loved them."
-                required
                 rows={6}
+                {...register("biography")}
                 className="flex placeholder:text-slate h-40 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
               <p className="text-slate font-sans text-xs mt-1.5 flex">
@@ -366,11 +375,10 @@ export default function SubmitPage() {
               <input
                 id="caretakerName"
                 placeholder="Name of the cemetery caretaker"
-                required
                 {...register("careTakerName")}
                 onChange={(e) => {
                   const cleaned = sanitizeName(e.target.value);
-                  setValue("careTakerName", cleaned, {shouldValidate: true})
+                  setValue("careTakerName", cleaned, { shouldValidate: true });
                 }}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
@@ -395,11 +403,12 @@ export default function SubmitPage() {
               <input
                 id="caretakerPhoneNumber"
                 placeholder="phone number of the cemetery caretaker"
-                required
                 {...register("careTakerPhoneNumber")}
                 onChange={(e) => {
                   const cleaned = sanitizePhone(e.target.value);
-                  setValue("careTakerPhoneNumber", cleaned, {shouldValidate: true})
+                  setValue("careTakerPhoneNumber", cleaned, {
+                    shouldValidate: true,
+                  });
                 }}
                 type="text"
                 className="flex placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
@@ -426,12 +435,13 @@ export default function SubmitPage() {
                 <input
                   id="applicantFullName"
                   placeholder="applicant full name"
-                  required
                   type="text"
                   {...register("applicantFullName")}
                   onChange={(e) => {
                     const cleaned = sanitizeName(e.target.value);
-                    setValue("applicantFullName", cleaned, {shouldValidate: true})
+                    setValue("applicantFullName", cleaned, {
+                      shouldValidate: true,
+                    });
                   }}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
@@ -452,17 +462,21 @@ export default function SubmitPage() {
                 </label>
 
                 <select
-                  value={yourRelationship}
-                  onChange={(e) => setYourRelationship(e.target.value)}
+                  {...register("relationship")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 >
                   <option value=""> Select your relationship</option>
-                  <option value="child">Child</option>
-                  <option value="spouse/partner">Spouse/Partner</option>
-                  <option value="sibling">Sibling</option>
-                  <option value="parent">Parent</option>
-                  <option value="">other relative</option>
+                  {relations.map((n) => (
+                    <option value={n} key={n}>
+                      {n}
+                    </option>
+                  ))}
                 </select>
+                {errors.relationship && (
+                  <p className="text-clay text-xs mt-1">
+                    {errors.relationship.message}
+                  </p>
+                )}
               </span>
             </div>
 
@@ -477,7 +491,6 @@ export default function SubmitPage() {
                 <input
                   id="applicantEmail"
                   placeholder="abd@hello.com"
-                  required
                   type="email"
                   {...register("applicantEmail")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
@@ -499,12 +512,13 @@ export default function SubmitPage() {
                 <input
                   id="applicantPhoneNumber"
                   placeholder="081234567890"
-                  required
                   type="tel"
                   {...register("applicantPhoneNumber")}
                   onChange={(e) => {
                     const cleaned = sanitizePhone(e.target.value);
-                    setValue("applicantPhoneNumber", cleaned, {shouldValidate: true})
+                    setValue("applicantPhoneNumber", cleaned, {
+                      shouldValidate: true,
+                    });
                   }}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 />
@@ -521,6 +535,42 @@ export default function SubmitPage() {
             </div>
 
             <span className="flex flex-col mb-5 w-full">
+              <FileUploadCardPractice
+                id="deathcert"
+                label="Death certificate"
+                onFileSelect={(f) =>
+                  setValue("deathCert", f as File, { shouldValidate: true })
+                }
+              />
+              {errors.deathCert && (
+                <p className="text-clay text-xs mt-1">
+                  {errors.deathCert.message}
+                </p>
+              )}
+            </span>
+
+            <span className="flex flex-col mb-5 w-full">
+              <FileUploadCardPractice
+                id="validId"
+                label="Valid ID"
+                onFileSelect={(f) =>
+                  setValue("validId", f as File, { shouldValidate: true })
+                }
+              />
+            </span>
+
+            <span className="flex flex-col mb-5 w-full border-b border-line pb-5">
+              <FileUploadCardPractice
+                id="burialPermit"
+                label="Burial Permit"
+                onFileSelect={(f) =>
+                  setValue("burialPermit", f as File, { shouldValidate: true })
+                }
+                optional
+              />
+            </span>
+
+            {/* <span className="flex flex-col mb-5 w-full">
               <FileUploadCard
                 id="deathCert"
                 label="Death Certificate"
@@ -543,14 +593,15 @@ export default function SubmitPage() {
                 optional
                 onFileSelect={setBurialPermit}
               />
-            </span>
+            </span> */}
 
             <span className="flex flex-start text-xs md:text-base gap-2.5 mb-5  text-ink-light font-sans">
               <Checkbox
                 id="agreeTerms"
                 checked={agreed}
-                onChange={setAgreed}
-                required
+                onChange={(v) =>
+                  setValue("agreed", v, { shouldValidate: true })
+                }
                 label={
                   <>
                     I confirm the information above is accurate and that I am a
@@ -572,12 +623,13 @@ export default function SubmitPage() {
                   </>
                 }
               />
-            </span>
-            {!agreed && (
+              {errors.agreed && (
                 <p className="text-clay text-xs mt-1">
-                  Kindly agree to terms and privacy policy to continue
+                  {errors.agreed.message}
                 </p>
               )}
+            </span>
+
             <button
               type="submit"
               // onClick={() => setSuccessModal(true)}
@@ -594,11 +646,68 @@ export default function SubmitPage() {
         </div>
       </section>
 
-      <section>
-        <pre className="text-xs whitespace-pre-wrap">
-          {JSON.stringify(applicationData, null, 2)}
-        </pre>
-      </section>
+      {applicationData && (
+        <section className="flex flex-col justify-center items-center px-10 py-4">
+          <h2 className="flex text-center text-brass ">Application Data</h2>
+          <div className="flex mx-auto gap-3 flex-col px-3 py-4 mt-5">
+            <p className="text-ink text-base text-left">
+              Full Name: {applicationData.fullName}
+            </p>
+            <p className="text-ink text-base text-left">
+              Full Name Nee: {applicationData.nee || ""}
+            </p>
+            <p className="text-ink text-base text-left">
+              Applicant Name: {applicationData.applicantFullName}
+            </p>
+            <p className="text-ink text-base text-left">
+              Caretaker Name: {applicationData.careTakerName}
+            </p>
+            <p className="text-ink text-base text-left">
+              Caretaker Phone number: {applicationData.careTakerPhoneNumber}
+            </p>
+            <p className="text-ink text-base text-left">
+              Aplicant Email: {applicationData.applicantEmail}
+            </p>
+            <p className="text-ink text-base text-left">
+              Applicant Phone number: {applicationData.applicantPhoneNumber}
+            </p>
+            <p className="text-ink text-base text-left">
+              Date of Birth: {applicationData.dateOfBirth}
+            </p>
+            <p className="text-ink text-base text-left">
+              Date of Death: {applicationData.dateOfDeath}
+            </p>
+            <p className="text-ink text-base text-left">
+              State of Death: {applicationData.stateOfDeath}
+            </p>
+            <p className="text-ink text-base text-left">
+              LGA: {applicationData.lga}
+            </p>
+            <p className="text-ink text-base text-left">
+              Burial Site: {applicationData.burialSite}
+            </p>
+            <p className="text-ink text-base text-left">
+              Relationship: {applicationData.relationship}
+            </p>
+            <p className="text-ink text-base text-left">
+              Death Certificate: {applicationData?.deathCert?.name}
+            </p>
+            <p className="text-ink text-base text-left">
+              Valid Id: {applicationData?.validId?.name}
+            </p>
+            <p className="text-ink text-base text-left">
+              Burial Permit: {applicationData?.burialPermit?.name ?? "None"}
+            </p>
+          </div>
+
+          <button
+            className="flex px-8 py-3 m-3 items-center btn-primary"
+            onClick={() => setSuccessModal(true)}
+          >
+            Proceed to Submit
+          </button>
+        </section>
+      )}
 
       {successModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm px-4">
