@@ -2,14 +2,14 @@
 import { Check, Lock, MoveLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { nigerianStates, type NigerianState } from "../data/states";
+import { nigerianStates } from "../data/states";
 import { useState } from "react";
 import { Checkbox } from "../components/checkbox";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FileUploadCardPractice } from "../components/fileUploadPractice";
-import { relations, type relationStatus } from "../data/relationship";
+import { relations } from "../data/relationship";
 
 const nameRegex = /^[a-zA-Z\s'-]+$/;
 const phoneRegex = /^(\+234|0)[0-9]{10}$/;
@@ -552,7 +552,7 @@ export default function SubmitPage() {
             <span className="flex flex-col mb-5 w-full">
               <FileUploadCardPractice
                 id="validId"
-                label="Valid ID"
+                label="Marvelous"
                 onFileSelect={(f) =>
                   setValue("validId", f as File, { shouldValidate: true })
                 }
