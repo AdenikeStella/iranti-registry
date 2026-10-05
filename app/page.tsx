@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { nigerianStates, type NigerianState } from "./data/states";
+import { nigerianStates, type NigerianState } from "./lib/data/states";
 import { FileText, Menu, Monitor, Shield, Users } from "lucide-react";
 
 export default function HomePage() {
