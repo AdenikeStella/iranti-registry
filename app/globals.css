@@ -259,6 +259,21 @@
          shadow-modal max-w-md w-full p-6 animate-slide-up;
 }
 
+ @utility page-btn {
+  @apply font-mono text-xs
+    px-3.5 py-1.5 rounded-md border border-line
+    bg-white cursor-pointer text-ink-light
+    transition-[background,border-color] duration-150
+    hover:border-ink hover:text-ink
+    active:bg-ink active:border-ink active:text-parchment
+    disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility page-btn-active {
+  @apply bg-ink border-ink text-parchment
+  hover:text-ink hover:bg-transparent;
+}
+
 /* ---- Other Misc Utilities ---- */
 @utility text-balance {
   text-wrap: balance;
