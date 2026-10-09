@@ -631,6 +631,7 @@ export default function SubmitPage() {
             </span>
 
             <button
+            data-testid= 'Submit Button'
               type="submit"
               // onClick={() => setSuccessModal(true)}
               className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
