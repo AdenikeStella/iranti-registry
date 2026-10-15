@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import deceasedRecords from '../../lib/data/deaceasedRecords.json'
-import { nigerianStates, type NigerianState } from "../../lib/data/states";
+import deceasedRecords from '@/app/lib/data/deaceasedRecords.json'
+import { nigerianStates, type NigerianState } from "@/app/lib/data/states";
 import { useMemo, useState } from "react";
 import { SearchIcon } from "lucide-react";
 

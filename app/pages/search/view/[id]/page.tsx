@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import deaceasedRecords from "../../../lib/data/deaceasedRecords.json";
+import deaceasedRecords from "@/app/lib/data/deaceasedRecords.json";
 import { ArrowLeft, CheckIcon, LockIcon } from "lucide-react";
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { relations, relationStatus } from "@/app/lib/data/relationship";
+import { relations } from "@/app/lib/data/relationship";
 
 type AccessState = "none" | "pending" | "denied" | "approved";
 const ACCESS_STATES: AccessState[] = ["none", "pending", "denied", "approved"];
