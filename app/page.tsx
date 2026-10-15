@@ -24,14 +24,20 @@ export default function HomePage() {
           </div>
 
           <div className="md:flex hidden justify-between gap-3 md:py-3 py-1">
+             <Link
+              href="/pages/about"
+              className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+            >
+              About  Ìrántí
+            </Link>
             <Link
-              href="/search"
+              href="/pages/search"
               className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
             >
               Search Records
             </Link>
             <Link
-              href="/submitMemorial"
+              href="/pages/submitMemorial"
               className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
             >
               Submit Memorial
@@ -46,6 +52,12 @@ export default function HomePage() {
 
           {isMenuButtonOpen && (
             <div className="absolute mt-40 flex flex-col border rounded-md bg-amber-50 border-brass px-4 py-2.5 z-9999 right-2">
+              <Link
+              href="/pages/about"
+              className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+            >
+              About  Ìrántí
+            </Link>
               <Link
                 href="/search"
                 className=" text-black border-b border-brass hover:bg-ink-light py-2"

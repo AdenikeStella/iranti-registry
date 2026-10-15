@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import deceasedRecords from "../lib/data/deaceasedRecords.json";
-import { nigerianStates, type NigerianState } from "../lib/data/states";
+import deceasedRecords from '../../lib/data/deaceasedRecords.json'
+import { nigerianStates, type NigerianState } from "../../lib/data/states";
 import { useMemo, useState } from "react";
 import { SearchIcon } from "lucide-react";
 
@@ -23,7 +23,6 @@ const normalize = (text: string) =>
   return matches ? Number(matches[matches.length - 1]) : null;
 };
  
-// timestamp used for sorting by date of death
 const getTime = (date: string): number => {
   const parsed = Date.parse(date);
   if (!Number.isNaN(parsed)) return parsed;
@@ -31,7 +30,6 @@ const getTime = (date: string): number => {
   return year ? new Date(year, 0, 1).getTime() : 0;
 };
  
-// builds [1, "…", 4, 5, 6, "…", 18]
 const getPageItems = (current: number, total: number): (number | "…")[] => {
   const wanted = new Set([1, total, current - 1, current, current + 1]);
   const pages = [...wanted].filter((p) => p >= 1 && p <= total).sort((a, b) => a - b);
@@ -50,7 +48,6 @@ const [nameInput, setNameInput] = useState("");
   const [yearFrom, setYearFrom] = useState("");
   const [yearTo, setYearTo] = useState("");
  
-  // what is actually being used to filter
   const [applied, setApplied] = useState({
     name: "",
     state: "" as NigerianState | "",
@@ -87,18 +84,14 @@ const [nameInput, setNameInput] = useState("");
     const to = applied.to ? Number(applied.to) : null;
  
     const results = deceasedRecords.filter((d) => {
-      // name
       if (query && !normalize(d.full_name).includes(query)) return false;
  
-      // state
       if (applied.state && d.state !== applied.state) return false;
  
-      // year of passing
       const year = getYear(d.date_of_death);
       if (from !== null && !Number.isNaN(from) && (year === null || year < from)) return false;
       if (to !== null && !Number.isNaN(to) && (year === null || year > to)) return false;
  
-      // quick filter chips
       if (quickFilter === "verified" && normalize(String(d.status)) !== "verified") return false;
       if (quickFilter === "recent" && (year === null || year < 2020)) return false;
  
@@ -112,7 +105,6 @@ const [nameInput, setNameInput] = useState("");
     });
   }, [applied, quickFilter, sortBy]);
  
-  // pagination
   const totalRecords = filteredRecords.length;
   const totalPages = Math.max(1, Math.ceil(totalRecords / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
