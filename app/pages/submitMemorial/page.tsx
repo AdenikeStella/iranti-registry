@@ -2,14 +2,14 @@
 import { Check, Lock, MoveLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { nigerianStates } from "../lib/data/states";
+import { nigerianStates } from "../../lib/data/states";
 import { useState } from "react";
-import { Checkbox } from "../components/checkbox";
+import { Checkbox } from "../../components/checkbox";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileUploadCardPractice } from "../components/fileUploadPractice";
-import { relations } from "../lib/data/relationship";
+import { FileUploadCardPractice } from "../../components/fileUploadPractice";
+import { relations } from "../../lib/data/relationship";
 
 const nameRegex = /^[a-zA-Z\s'-]+$/;
 const phoneRegex = /^(\+234|0)[0-9]{10}$/;
@@ -631,6 +631,7 @@ export default function SubmitPage() {
             </span>
 
             <button
+            data-testid= 'Submit Button'
               type="submit"
               // onClick={() => setSuccessModal(true)}
               className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
