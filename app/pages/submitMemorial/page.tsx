@@ -120,8 +120,8 @@ export default function SubmitPage() {
             <Image
               src="/iranti-logo-detailed.svg"
               alt="Iranti Logo"
-              width={500}
-              height={500}
+              width={200}
+              height={200}
               priority
             />
           </div>

@@ -17,8 +17,8 @@ export default function HomePage() {
             <Image
               src="/iranti-logo-detailed.svg"
               alt="Iranti Logo"
-              width={500}
-              height={500}
+              width={200}
+              height={200}
               priority
             />
           </div>
@@ -26,19 +26,19 @@ export default function HomePage() {
           <div className="md:flex hidden justify-between gap-3 md:py-3 py-1">
              <Link
               href="/pages/about"
-              className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+              className="bg-brass rounded-md py-2 px-3 text-ink border hover:text-parchment border-brass hover:border-ink hover:bg-ink-light text-xs"
             >
               About  Ìrántí
             </Link>
             <Link
               href="/pages/search"
-              className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+              className=" bg-brass rounded-md py-2 px-3 text-ink border hover:text-parchment border-brass hover:border-ink hover:bg-ink-light text-xs"
             >
               Search Records
             </Link>
             <Link
               href="/pages/submitMemorial"
-              className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+              className="bg-brass rounded-md py-2 px-3 text-ink border hover:text-parchment border-brass hover:border-ink hover:bg-ink-light text-xs"
             >
               Submit Memorial
             </Link>
@@ -54,19 +54,19 @@ export default function HomePage() {
             <div className="absolute mt-40 flex flex-col border rounded-md bg-amber-50 border-brass px-4 py-2.5 z-9999 right-2">
               <Link
               href="/pages/about"
-              className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+              className="text-ink border-b border-brass hover:bg-ink-light py-2"
             >
               About  Ìrántí
             </Link>
               <Link
-                href="/search"
-                className=" text-black border-b border-brass hover:bg-ink-light py-2"
+                href="/pages/search"
+                className=" text-ink border-b border-brass hover:bg-ink-light py-2"
               >
                 Search Records
               </Link>
               <Link
-                href="/submitMemorial"
-                className=" text-black border-brass hover:bg-ink-light py-2"
+                href="/pages/submitMemorial"
+                className=" text-ink border-brass hover:bg-ink-light py-2"
               >
                 Submit Memorial
               </Link>
@@ -77,7 +77,7 @@ export default function HomePage() {
 
       <section
         id="submit"
-        className="flex flex-col md:px-10 px-2 justify-between bg-ink md:bg-black md:mt-40 mt-32"
+        className="flex flex-col md:px-10 px-2 justify-between bg-ink md:bg-black mt-20"
       >
         {/* search */}
         <div className="flex flex-row">
@@ -104,14 +104,14 @@ export default function HomePage() {
 
             <div className="flex justify-center gap-10 md:py-3 py-1">
               <Link
-                href="/search"
-                className="btn-outline text-parchment border border-parchment hover:bg-ink-light"
+                href="/pages/search"
+                className="btn-outline py-2 px-3 rounded-md text-parchment border border-parchment hover:bg-ink-light text-xs"
               >
                 Search Records
               </Link>
               <Link
-                href="/submitMemorial"
-                className="bg-brass rounded-md py-2 px-3 text-parchment border border-parchment hover:bg-ink-light"
+                href="/pages/submitMemorial"
+                className="items-center justify-center flex bg-brass rounded-md py-2 px-3 text-ink border hover:text-parchment border-brass hover:border-ink hover:bg-ink-light text-xs"
               >
                 Submit Memorial
               </Link>
@@ -158,46 +158,6 @@ export default function HomePage() {
       </section>
 
       <section className="flex flex-col md:px-10 px-2 justify-between bg-parchment font-mono">
-        <div className="flex flex-col md:flex-row mx-auto border-line rounded-xl shadow-md py-6 px-5 w-full md:w-7xl my-10 bg-[#ffffff] gap-4">
-          <div className="flex flex-col gap-3">
-            <label htmlFor="search" className="text-xs color-">
-              Full Name
-            </label>
-            <input
-              type="search"
-              placeholder="search by name"
-              className="md:w-4xl w-full border border-line flex p-3 rounded-md"
-              id="search"
-            />
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <label htmlFor="search" className="text-xs color-">
-              State
-            </label>
-            <select
-              value={naijaStates}
-              onChange={(e) =>
-                setNaijaStates(e.target.value as NigerianState | "")
-              }
-              className="w-full rounded-md p-3 border border-line"
-            >
-              <option value=""> Select state</option>
-              {nigerianStates.map((n) => (
-                <option value={n} key={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex flex-col gap-3">
-            <label htmlFor="search" className="text-xs color-"></label>
-            <button className="flex bg-ink rounded-md text-[#ffffff] p-4 font-normal text-sm border-box pointer mt-3 whitespace-nowrap mx-auto md:mx-0">
-              Search Records
-            </button>
-          </div>
-        </div>
 
         <div className="flex flex-col mx-auto px-6 py-5 items-center justify-center">
           <div className="flex uppercase text-brass font-mono mb-3 text-sm text-center">
@@ -368,13 +328,13 @@ export default function HomePage() {
 
           <div className="flex justify-center gap-10 md:py-3 py-1">
               <Link
-                href="/search"
+                href="/pages/search"
                 className="bg-ink rounded-md py-3.5 px-2 md:px-7 text-parchment border border-parchment hover:bg-ink-light text-xs md:text-base"
               >
                 Search Records
               </Link>
               <Link
-                href="/submitMemorial"
+                href="/pages/submitMemorial"
                 className="bg-brass rounded-md py-3.5 px-2 md:px-7 text-parchment border border-parchment hover:bg-ink-light text-xs md:text-base"
               >
                 Submit Memorial
@@ -392,13 +352,13 @@ export default function HomePage() {
             <ul className="text-slate text-sm space-y-2">
               <li>
                 {" "}
-                <Link href="/#search" className="text-slate">
+                <Link href="/pages/search" className="text-slate">
                   Search Records
                 </Link>
               </li>
               <li>
                 {" "}
-                <Link href="/submitMemorial" className="text-slate">
+                <Link href="/pages/submitMemorial" className="text-slate">
                   Submit a Memorial
                 </Link>
               </li>
