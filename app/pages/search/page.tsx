@@ -124,13 +124,13 @@ const [nameInput, setNameInput] = useState("");
             <Image
               src="/iranti-logo-detailed.svg"
               alt="Iranti Logo"
-              width={500}
-              height={500}
+              width={200}
+              height={200}
               priority
             />
           </div>
           <Link
-            href="/submitMemorial"
+            href="/pages/submitMemorial"
             className="btn-primary bg-brass text-parchment border border-parchment hover:bg-ink-light"
           >
             Submit a Memorial
@@ -139,7 +139,7 @@ const [nameInput, setNameInput] = useState("");
       </nav>
  
       {/* hero */}
-      <div className="bg-ink flex flex-col md:px-10 px-2 pb-14 pt-8 justify-between font-mono mt-48 mx-auto w-full mb-6">
+      <div className="bg-ink flex flex-col md:px-10 px-2 pb-14 pt-8 justify-between font-mono mt-20 mx-auto w-full mb-6">
         <h5 className="text-brass uppercase m-2.5 font-mono text-xs">
           Burial & Memorial Records
         </h5>
@@ -154,9 +154,9 @@ const [nameInput, setNameInput] = useState("");
       </div>
  
       {/* search */}
-      <div className="flex -mt-6 mx-auto mb-0 py-6 px-0 relative z-10 min-w-275">
-        <div className="flex flex-wrap rounded-card px-6 py-5 shadow-lg gap-3 bg-[#ffffff] border border-line">
-          <div className="flex flex-col flex-2 gap-3 min-w-45">
+      <div className="flex -mt-6 mx-auto mb-0 py-6 md:px-8 px-4 relative z-10 md:min-w-275 w-full">
+        <div className="flex flex-col md:flex-row rounded-card px-6 py-5 shadow-lg gap-3 bg-[#ffffff] border border-line w-full">
+          <div className="flex flex-col flex-2 gap-3 md:min-w-45 w-full">
             <label htmlFor="search" className="text-xs color-">
               Full Name
             </label>
@@ -176,7 +176,7 @@ const [nameInput, setNameInput] = useState("");
             </div>
           </div>
  
-          <div className="flex flex-col gap-3 min-w-36 flex-1">
+          <div className="flex flex-col gap-3 md:min-w-36 w-full flex-1">
             <label htmlFor="state" className="text-xs color-">
               State
             </label>
@@ -197,17 +197,17 @@ const [nameInput, setNameInput] = useState("");
             </select>
           </div>
  
-          <div className="flex flex-col flex-2 gap-3 min-w-45">
+          <div className="flex flex-col flex-2 gap-3 md:min-w-45 w-full">
             <label htmlFor="year-from" className="text-xs color-">
               Year of passing
             </label>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <input
                 type="text"
                 inputMode="numeric"
                 maxLength={4}
                 placeholder="from"
-                className="w-1/2 border border-line flex p-3 pl-9 rounded-md"
+                className="md:w-1/2 w-full border border-line flex p-3 pl-9 rounded-md"
                 id="year-from"
                 value={yearFrom}
                 onChange={(e) => setYearFrom(e.target.value.replace(/\D/g, ""))}
@@ -220,7 +220,7 @@ const [nameInput, setNameInput] = useState("");
                 inputMode="numeric"
                 maxLength={4}
                 placeholder="to"
-                className="w-1/2 border border-line flex p-3 pl-9 rounded-md"
+                className="md:w-1/2 w-full border border-line flex p-3 pl-9 rounded-md"
                 id="year-to"
                 aria-label="Year of passing to"
                 value={yearTo}
@@ -245,9 +245,9 @@ const [nameInput, setNameInput] = useState("");
  
       {/* search result */}
  
-      <div className="max-w-[1100px]; my-0 mx-auto; px-10 pt-6 pb-15">
+      <div className="my-0 px-6 pt-6 pb-15">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-          <div className="flex items-center; gap-2 flex-wrap">
+          <div className="flex items-center gap-2 flex-row">
             <span
               id="result-count"
               className="font-mono text-xs uppercase text-slate mr-1"
@@ -256,7 +256,7 @@ const [nameInput, setNameInput] = useState("");
             </span>
             <button
               type="button"
-              className={`filter-chip ${quickFilter === "all" ? "active" : ""}`}
+              className={`filter-chip ${quickFilter === "all" ? "active" : ""} border border-line bg-white rounded-xl px-2 py-2`}
               onClick={() => {
                 setQuickFilter("all");
                 setPage(1);
@@ -266,7 +266,7 @@ const [nameInput, setNameInput] = useState("");
             </button>
             <button
               type="button"
-              className={`filter-chip ${quickFilter === "verified" ? "active" : ""}`}
+              className={`filter-chip ${quickFilter === "verified" ? "active" : ""} border border-line bg-white rounded-xl px-2 py-2`}
               onClick={() => {
                 setQuickFilter("verified");
                 setPage(1);
@@ -274,23 +274,14 @@ const [nameInput, setNameInput] = useState("");
             >
               Verified only
             </button>
-            <button
-              type="button"
-              className={`filter-chip ${quickFilter === "recent" ? "active" : ""}`}
-              onClick={() => {
-                setQuickFilter("recent");
-                setPage(1);
-              }}
-            >
-              Recent — 2020+
-            </button>
+            
           </div>
-          <div className="display:flex; align-items:center; gap:8px;">
-            <span className="font-family:'IBM Plex Mono',monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; color:#97A1AC;">
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs uppercase text-slate">
               Sort by
             </span>
             <select
-              className="w-auto px-1.5 py-3 text-sm"
+              className="w-auto pl-3 pr-5 py-3 text-sm border border-line bg-white rounded-xl"
               value={sortBy}
               onChange={(e) => {
                 setSortBy(e.target.value as SortOption);
@@ -404,21 +395,21 @@ const [nameInput, setNameInput] = useState("");
         )}
       </div>
 
-      <footer className="flex flex-col bg-ink pt-12 pb-6 px-10 md:px-25 font-sans w-full">
-          <div className="flex flex-wrap justify-between">
+      <footer className="flex flex-col bg-ink py-3 mx:pt-12 md:pb-6 px-2 md:px-25 font-sans w-full">
+          <div className="flex justify-between">
               <div className="flex text-slate md:justify-start">
-            <p className="text-xs font-normal font-mono">
+            <p className="text-[10px] md:text-xs font-normal font-mono">
               &copy; 2026 . Ìrántí Registry.
             </p>
           </div>
           <div className="flex text-slate md:justify-end gap-4 uppercase">
-<Link href="/#" className="text-slate text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
+<Link href="/#" className="text-slate text-[10px] md:text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
                 Privacy
               </Link>
-              <Link href="/#" className="text-slate text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
+              <Link href="/#" className="text-slate text-[10px] md:text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
                 Terms
               </Link>
-              <Link href="/#" className="text-slate text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
+              <Link href="/#" className="text-slate text-[10px] md:text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
                 Data protection
               </Link>
           </div>
