@@ -30,8 +30,14 @@ export default function PagesLayout({
         
                   <div className="md:flex hidden justify-between gap-3 py-1">
                     <Link
+                      href="/"
+                      className="btn-primary bg-brass text-xs py-2 px-3  text-parchment border border-brass hover:bg-ink-light"
+                    >
+                      Home
+                    </Link>
+                    <Link
                       href="/pages/search"
-                      className="btn-primary bg-transparent text-xs py-2 px-3 text-parchment border border-parchment hover:bg-ink-light"
+                      className="btn-primary bg-brass text-xs py-2 px-3 text-parchment border border-brass hover:bg-ink-light"
                     >
                       Search Records
                     </Link>
@@ -51,6 +57,12 @@ export default function PagesLayout({
         
                   {isMenuButtonOpen && (
                     <div className="absolute mt-40 flex flex-col border rounded-md bg-amber-50 border-brass px-4 py-2.5 z-9999 right-2">
+                      <Link
+                        href="/"
+                        className=" text-black border-b border-brass hover:bg-ink-light py-2"
+                      >
+                        Home
+                      </Link>
                       <Link
                         href="/search"
                         className=" text-black border-b border-brass hover:bg-ink-light py-2"
