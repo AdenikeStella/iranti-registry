@@ -114,26 +114,7 @@ export default function SubmitPage() {
 
   return (
     <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
-      <nav className="bg-ink md:px-6 fixed w-full z-20 mb-20 border-b border-line">
-        <div className="p-2 flex flex-row justify-between items-center container">
-          <div className="">
-            <Image
-              src="/iranti-logo-detailed.svg"
-              alt="Iranti Logo"
-              width={200}
-              height={200}
-              priority
-            />
-          </div>
-          <Link
-            href="/"
-            className="flex flex-row justify-between gap-3 md:py-3 py-1 text-slate font-mono text-xs uppercase"
-          >
-            <MoveLeft className="flex w-4 h-4" />
-            Return to home
-          </Link>
-        </div>
-      </nav>
+      
 
       <section className="flex flex-col md:px-10 px-2 justify-between bg-parchment font-mono mt-60 mx-auto md:max-w-190 min-h-screen w-full mb-6">
         <div className="flex uppercase text-brass font-mono mb-5 text-xs px-3 md:text-sm text-center">
@@ -570,30 +551,7 @@ export default function SubmitPage() {
               />
             </span>
 
-            {/* <span className="flex flex-col mb-5 w-full">
-              <FileUploadCard
-                id="deathCert"
-                label="Death Certificate"
-                onFileSelect={setDeathCert}
-              />
-            </span>
-
-            <span className="flex flex-col mb-5 w-full">
-              <FileUploadCard
-                id="validId"
-                label="Your Valid ID (National ID, passport, voter's card or driver's licence)"
-                onFileSelect={setValidId}
-              />
-            </span>
-
-            <span className="flex flex-col mb-5 w-full border-b border-line pb-5">
-              <FileUploadCard
-                id="burialPermit"
-                label="Burial permit or cemetery letter"
-                optional
-                onFileSelect={setBurialPermit}
-              />
-            </span> */}
+            
 
             <span className="flex flex-start text-xs md:text-base gap-2.5 mb-5  text-ink-light font-sans">
               <Checkbox

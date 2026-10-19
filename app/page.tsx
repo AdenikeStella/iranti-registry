@@ -384,13 +384,13 @@ export default function HomePage() {
             <ul className="text-slate text-sm space-y-2">
               <li>
                 {" "}
-                <Link href="/#" className="text-slate">
+                <Link href="/pages/terms_privacy/privacy" className="text-slate">
                   Privacy Policy
                 </Link>
               </li>
               <li>
                 {" "}
-                <Link href="/#" className="text-slate">
+                <Link href="/pages/terms_privacy/terms" className="text-slate">
                   Terms of Use
                 </Link>
               </li>
