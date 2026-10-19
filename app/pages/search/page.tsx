@@ -117,29 +117,11 @@ const [nameInput, setNameInput] = useState("");
   };
 
    return (
-    <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
-      <nav className="bg-ink md:px-6 fixed w-full z-20 mb-20">
-        <div className="p-2 flex flex-row justify-between items-center container">
-          <div className="">
-            <Image
-              src="/iranti-logo-detailed.svg"
-              alt="Iranti Logo"
-              width={200}
-              height={200}
-              priority
-            />
-          </div>
-          <Link
-            href="/pages/submitMemorial"
-            className="btn-primary bg-brass text-parchment border border-parchment hover:bg-ink-light"
-          >
-            Submit a Memorial
-          </Link>
-        </div>
-      </nav>
+    <div className="space-y-6">
+      
  
       {/* hero */}
-      <div className="bg-ink flex flex-col md:px-10 px-2 pb-14 pt-8 justify-between font-mono mt-20 mx-auto w-full mb-6">
+      <div className="bg-ink flex flex-col md:px-10 px-2 pb-14 pt-8 justify-between font-mono mx-auto w-full mb-6">
         <h5 className="text-brass uppercase m-2.5 font-mono text-xs">
           Burial & Memorial Records
         </h5>
@@ -334,7 +316,8 @@ const [nameInput, setNameInput] = useState("");
                     {d.short_bio}
                   </p>
                   <Link
-                    href={`/search/view/${d.id}`}
+                  href={`/pages/search/view/${d.id}`}
+                    // href={`/search/view/${d.id}`}
                     className="btn-outline w-full hover:bg-ink-light"
                   >
                     View Memorial
@@ -394,28 +377,6 @@ const [nameInput, setNameInput] = useState("");
           </div>
         )}
       </div>
-
-      <footer className="flex flex-col bg-ink py-3 mx:pt-12 md:pb-6 px-2 md:px-25 font-sans w-full">
-          <div className="flex justify-between">
-              <div className="flex text-slate md:justify-start">
-            <p className="text-[10px] md:text-xs font-normal font-mono">
-              &copy; 2026 . Ìrántí Registry.
-            </p>
-          </div>
-          <div className="flex text-slate md:justify-end gap-4 uppercase">
-<Link href="/#" className="text-slate text-[10px] md:text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
-                Privacy
-              </Link>
-              <Link href="/#" className="text-slate text-[10px] md:text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
-                Terms
-              </Link>
-              <Link href="/#" className="text-slate text-[10px] md:text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md">
-                Data protection
-              </Link>
-          </div>
-              
-          </div>
-      </footer>
     </div>
   );
 }

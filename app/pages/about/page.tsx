@@ -55,63 +55,11 @@ const standForData = [
 ];
 
 export default function AboutPage() {
-  const [isMenuButtonOpen, setIsMenubuttonOpen] = useState(false);
+  // const [isMenuButtonOpen, setIsMenubuttonOpen] = useState(false);
 
   return (
-    <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
-      <nav className="bg-ink md:px-6 fixed w-full z-20 border-b border-line">
-        <div className="p-2 flex flex-row justify-between items-center container">
-          <div className="flex">
-            <Image
-              src="/iranti-logo-detailed.svg"
-              alt="Iranti Logo"
-              width={200}
-              height={200}
-              priority
-            />
-          </div>
-
-          <div className="md:flex hidden justify-between gap-3 py-1">
-            <Link
-              href="/search"
-              className="btn-primary bg-transparent text-xs py-2 px-3 text-parchment border border-parchment hover:bg-ink-light"
-            >
-              Search Records
-            </Link>
-            <Link
-              href="/submitMemorial"
-              className="btn-primary bg-brass text-xs py-2 px-3  text-parchment border border-brass hover:bg-ink-light"
-            >
-              Submit Memorial
-            </Link>
-          </div>
-          <button
-            className="relative md:hidden flex p-2 rounded bg-amber-50"
-            onClick={() => setIsMenubuttonOpen((prev) => !prev)}
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-
-          {isMenuButtonOpen && (
-            <div className="absolute mt-40 flex flex-col border rounded-md bg-amber-50 border-brass px-4 py-2.5 z-9999 right-2">
-              <Link
-                href="/search"
-                className=" text-black border-b border-brass hover:bg-ink-light py-2"
-              >
-                Search Records
-              </Link>
-              <Link
-                href="/submitMemorial"
-                className=" text-black border-brass hover:bg-ink-light py-2"
-              >
-                Submit Memorial
-              </Link>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      <section className="flex flex-col md:px-6 px-2 justify-between bg-[#FDFAF5] mt-20">
+    <div>
+      <section className="flex flex-col md:px-6 px-2 justify-between bg-[#FDFAF5]">
         {/* search */}
         <div className="flex flex-row">
           <div className="flex flex-col gap-3.5 p-2 mx-auto">
@@ -326,172 +274,85 @@ export default function AboutPage() {
         <div className="flex flex-col max-w-130 mx-auto my-0 p-0 items-center justify-center">
           <div className="mb-7 flex">
             <svg
-            className="candle-icon"
-            viewBox="0 0 64 80"
-            width="48"
-            height="60"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M32 18 C34 12 40 6 37 0 C44 6 42 16 36 20 C42 14 44 4 40 -2 C48 10 44 24 36 28 C33 29 29 29 26 28 C18 24 14 10 22 -2 C18 4 20 14 26 20 C20 16 18 6 25 0 C22 6 28 12 32 18Z"
-              fill="#B8923F"
-            ></path>
-            <path
-              d="M22 34 Q18 42 20 48 Q22 44 22 38Z"
-              fill="#EDE8DC"
-              stroke="#E7E0D1"
-              strokeWidth="0.5"
-            ></path>
-            <path
-              d="M42 34 Q46 43 44 50 Q42 46 42 40Z"
-              fill="#EDE8DC"
-              stroke="#E7E0D1"
-              strokeWidth="0.5"
-            ></path>
-            <ellipse
-              cx="32"
-              cy="32"
-              rx="12"
-              ry="4"
-              fill="#EDE8DC"
-              stroke="#E7E0D1"
-              strokeWidth="1"
-            ></ellipse>
-            <rect
-              x="22"
-              y="32"
-              width="20"
-              height="38"
-              rx="3"
-              fill="#F7F3EA"
-              stroke="#E7E0D1"
-              strokeWidth="1.5"
-            ></rect>
-            <rect
-              x="25"
-              y="36"
-              width="5"
-              height="30"
-              rx="2.5"
-              fill="white"
-              opacity="0.5"
-            ></rect>
-            <rect
-              x="14"
-              y="70"
-              width="36"
-              height="6"
-              rx="3"
-              fill="#1E2A44"
-            ></rect>
-          </svg>
+              className="candle-icon"
+              viewBox="0 0 64 80"
+              width="48"
+              height="60"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M32 18 C34 12 40 6 37 0 C44 6 42 16 36 20 C42 14 44 4 40 -2 C48 10 44 24 36 28 C33 29 29 29 26 28 C18 24 14 10 22 -2 C18 4 20 14 26 20 C20 16 18 6 25 0 C22 6 28 12 32 18Z"
+                fill="#B8923F"
+              ></path>
+              <path
+                d="M22 34 Q18 42 20 48 Q22 44 22 38Z"
+                fill="#EDE8DC"
+                stroke="#E7E0D1"
+                strokeWidth="0.5"
+              ></path>
+              <path
+                d="M42 34 Q46 43 44 50 Q42 46 42 40Z"
+                fill="#EDE8DC"
+                stroke="#E7E0D1"
+                strokeWidth="0.5"
+              ></path>
+              <ellipse
+                cx="32"
+                cy="32"
+                rx="12"
+                ry="4"
+                fill="#EDE8DC"
+                stroke="#E7E0D1"
+                strokeWidth="1"
+              ></ellipse>
+              <rect
+                x="22"
+                y="32"
+                width="20"
+                height="38"
+                rx="3"
+                fill="#F7F3EA"
+                stroke="#E7E0D1"
+                strokeWidth="1.5"
+              ></rect>
+              <rect
+                x="25"
+                y="36"
+                width="5"
+                height="30"
+                rx="2.5"
+                fill="white"
+                opacity="0.5"
+              ></rect>
+              <rect
+                x="14"
+                y="70"
+                width="36"
+                height="6"
+                rx="3"
+                fill="#1E2A44"
+              ></rect>
+            </svg>
           </div>
-          
+
           <h2 className="font-semibold font-serif md:text-4xl text-xl text-ink mb-4">
-                    Help us preserve what time takes away
-                  </h2>
-                  <p className="flex text-ink-light text-base font-sans mb-9">
-                    {`Every memorial submitted makes Nigeria's first burial registry more complete. If you know someone whose resting place should be remembered — add their record today.`}
-                  </p>
-                  <div className="flex flex-wrap gap-3 justify-center">
-                    <Link href="/pages/submitMemorial" className="btn-primary"> Submit a Memorial</Link>
-                  <Link href="/pages/search" className="btn-outline">Search the Registry</Link>
-                  </div>
-                  
+            Help us preserve what time takes away
+          </h2>
+          <p className="flex text-ink-light text-base font-sans mb-9">
+            {`Every memorial submitted makes Nigeria's first burial registry more complete. If you know someone whose resting place should be remembered — add their record today.`}
+          </p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link href="/pages/submitMemorial" className="btn-primary">
+              {" "}
+              Submit a Memorial
+            </Link>
+            <Link href="/pages/search" className="btn-outline">
+              Search the Registry
+            </Link>
+          </div>
         </div>
       </section>
-
-      <footer className="flex flex-col bg-ink pt-12 pb-6 px-10 md:px-25 font-sans w-full">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-80 md:mb-12 mb-6 border-b border-line pb-6 md:pb-16 px-2">
-          <nav aria-label="Registry" className="flex flex-col gap-3">
-            <h5 className="flex uppercase text-brass font-mono text-xs mb-3">
-              Registry
-            </h5>
-            <ul className="text-slate text-sm space-y-2">
-              <li>
-                {" "}
-                <Link href="/#search" className="text-slate">
-                  Search Records
-                </Link>
-              </li>
-              <li>
-                {" "}
-                <Link href="/submitMemorial" className="text-slate">
-                  Submit a Memorial
-                </Link>
-              </li>
-              <li>
-                {" "}
-                <Link href="/" className="text-slate">
-                  Request Access
-                </Link>
-              </li>
-              <li>
-                {" "}
-                <Link href="/#howItWorks" className="text-slate">
-                  How it Works
-                </Link>
-              </li>
-            </ul>
-          </nav>
-
-          <nav aria-label="Legal" className="flex flex-col gap-3">
-            <h5 className="flex uppercase text-brass font-mono text-xs mb-3">
-              Legal
-            </h5>
-            <ul className="text-slate text-sm space-y-2">
-              <li>
-                {" "}
-                <Link href="/#" className="text-slate">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                {" "}
-                <Link href="/#" className="text-slate">
-                  Terms of Use
-                </Link>
-              </li>
-              <li>
-                {" "}
-                <Link href="/#" className="text-slate">
-                  Data protection
-                </Link>
-              </li>
-            </ul>
-          </nav>
-
-          <nav
-            aria-label="Contact"
-            className="flex flex-col gap-3 md:mb-0 mb-8"
-          >
-            <h5 className="flex uppercase text-brass font-mono text-xs mb-3">
-              Contact
-            </h5>
-            <ul className="text-slate text-sm space-y-2">
-              <li className="text-slate">info@iranting.com</li>
-              <li className="text-slate"> Submit a Memorial</li>
-            </ul>
-          </nav>
-        </div>
-
-        <div className="mb-12 flex flex-col md:flex-row justify-between px-0 md:items-center gap-4 md:gap-0">
-          <div className="flex text-slate md:justify-start">
-            <p className="text-xs font-normal font-mono">
-              &copy; 2026 . Ìrántí Registry.
-            </p>
-          </div>
-
-          <div className="flex uppercase text-slate md:justify-end">
-            <p className="text-xs font-normal font-mono">
-              {" "}
-              Ìrántí — {` `} <span className="text-brass"> {` `} Memory </span>{" "}
-              {` `} in Yoruba
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

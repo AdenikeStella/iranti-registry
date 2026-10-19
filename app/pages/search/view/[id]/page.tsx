@@ -10,25 +10,6 @@ import { relations } from "@/app/lib/data/relationship";
 type AccessState = "none" | "pending" | "denied" | "approved";
 const ACCESS_STATES: AccessState[] = ["none", "pending", "denied", "approved"];
 
-// function MetaChip({
-//   children,
-//   icon,
-//   tone = "text-slate",
-// }: {
-//   children: React.ReactNode;
-//   icon?: React.ReactNode;
-//   tone?: string;
-// }) {
-//   return (
-//     <div className="bg-white border border-line rounded-lg px-4 py-2.5 flex items-center gap-2">
-//       {icon}
-//       <span className={`font-mono text-[0.65rem] uppercase tracking-[0.06em] ${tone}`}>
-//         {children}
-//       </span>
-//     </div>
-//   );
-// }
-
 function LockedRow({
   label,
   value,
@@ -77,7 +58,7 @@ function PublicRow({ label, value }: { label: string; value: string }) {
 }
 
 export default function ViewMemorialPage() {
-  const params = useParams();
+  const params = useParams<{id: string}> ();
   const id = params.id;
   const [access, setAccess] = useState<AccessState>("none");
   const [modalOpen, setModalOpen] = useState(false);
@@ -110,28 +91,9 @@ export default function ViewMemorialPage() {
     );
   }
   return (
-    <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
-      <nav className="bg-ink md:px-6 fixed w-full z-20 mb-20">
-        <div className="p-2 flex flex-row justify-between items-center container">
-          <div className="">
-            <Image
-              src="/iranti-logo-detailed.svg"
-              alt="Iranti Logo"
-              width={300}
-              height={300}
-              priority
-            />
-          </div>
-          <Link
-            href="/submitMemorial"
-            className="btn-primary bg-brass text-parchment border border-parchment hover:bg-ink-light hidden md:flex"
-          >
-            Submit a Memorial
-          </Link>
-        </div>
-        
-      </nav>
-      <div className="bg-white border border-line px-4 py-3 flex items-center gap-2.5 flex-wrap mb-8 mt-30 w-full">
+    <div className="space-y-6">
+      
+      <div className="bg-white border border-line px-4 py-3 flex items-center gap-2.5 flex-wrap mb-8 mt-6 w-full">
           {ACCESS_STATES.map((state) => (
             <button
               key={state}
@@ -290,35 +252,7 @@ export default function ViewMemorialPage() {
         </div>
       </section>
 
-      <footer className="flex flex-col bg-ink pt-12 pb-6 px-10 md:px-25 font-sans w-full">
-        <div className="flex flex-wrap justify-between">
-          <div className="flex text-slate md:justify-start">
-            <p className="text-xs font-normal font-mono">
-              &copy; 2026 . Ìrántí Registry.
-            </p>
-          </div>
-          <div className="flex text-slate md:justify-end gap-4 uppercase">
-            <Link
-              href="/#"
-              className="text-slate text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="/#"
-              className="text-slate text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md"
-            >
-              Terms
-            </Link>
-            <Link
-              href="/#"
-              className="text-slate text-xs font-mono hover:bg-slate hover:px-2.5 hover:py-1.5 hover:text-ink hover:rounded-md"
-            >
-              Data protection
-            </Link>
-          </div>
-        </div>
-      </footer>
+      
 
             {/* ── REQUEST ACCESS MODAL ── */}
       {modalOpen && (
