@@ -1,81 +1,16 @@
 "use client";
-import { Check, Lock, MoveLeft } from "lucide-react";
-import Image from "next/image";
+import { Check, Lock } from "lucide-react";
 import Link from "next/link";
 import { nigerianStates } from "../../lib/data/states";
 import { useState } from "react";
 import { Checkbox } from "../../components/checkbox";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FileUploadCardPractice } from "../../components/fileUploadPractice";
 import { relations } from "../../lib/data/relationship";
+import { formSchema, type FormValues, } from "./schema";
 
-const nameRegex = /^[a-zA-Z\s'-]+$/;
-const phoneRegex = /^(\+234|0)[0-9]{10}$/;
 
-const formSchema = z.object({
-  fullName: z
-    .string()
-    .min(1, "Full name is required")
-    .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
-  nee: z.string().regex(nameRegex, "...").optional().or(z.literal("")),
-  applicantFullName: z
-    .string()
-    .min(1, "Your full name is required")
-    .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
-  careTakerName: z
-    .string()
-    .min(1, "caretaker name is required")
-    .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
-  applicantEmail: z.string().email("invalid email address"),
-  applicantPhoneNumber: z
-    .string()
-    .min(11, "enter a valid phone number")
-    .regex(phoneRegex, "Enter a valid Nigerian phone number"),
-  careTakerPhoneNumber: z
-    .string()
-    .min(11, "enter a valid phone number")
-    .regex(phoneRegex, "Enter a valid Nigerian phone number"),
-  dateOfBirth: z
-    .string()
-    .min(1, "Date of Birth is required")
-    .refine((date) => new Date(date) <= new Date(), {
-      message: "Date of birth cannot be in the future",
-    }),
-  dateOfDeath: z
-    .string()
-    .min(1, "Date of Death is required")
-    .refine((date) => new Date(date) <= new Date(), {
-      message: "Date of death cannot be in the future",
-    }),
-  lga: z
-    .string()
-    .min(2, "LGA is required")
-    .regex(nameRegex, "LGA should only contain letters, spaces and hyphens"),
-  burialSite: z
-    .string()
-    .min(2, "Burial site is required")
-    .regex(/^[a-zA-Z0-9\s,.'-]+$/, "Contains invalid characters"),
-  stateOfDeath: z.string().min(1, "Select a state"),
-  relationship: z.string().min(1, "Select your relationship"),
-  biography: z
-    .string()
-    .min(1, "A short biography is required")
-    .optional()
-    .or(z.literal("")),
-  agreed: z.boolean().refine((v) => v === true, {
-    message: "Kindly agree to the terms and privacy policy to continue",
-  }),
-  deathCert: z.custom<File>(
-    (f) => f instanceof File,
-    "Death certificate is required",
-  ),
-  validId: z.custom<File>((f) => f instanceof File, "Valid ID is required"),
-  burialPermit: z.custom<File | null>().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
 
 const today = (() => {
   const d = new Date();
@@ -144,6 +79,7 @@ export default function SubmitPage() {
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <span className="flex flex-col mb-5">
               <label
+              
                 htmlFor="fullName"
                 className="text-slate uppercase font-mono text-xs mb-1.5 flex"
               >
@@ -438,15 +374,16 @@ export default function SubmitPage() {
                   htmlFor="relationship"
                   className="text-slate uppercase font-mono text-xs mb-1.5"
                 >
-                  Your relationship to the deceased{" "}
+                  Your relationship to the deceased
                   <span className="text-clay">*</span>
                 </label>
 
                 <select
+                id="relationship"
                   {...register("relationship")}
                   className=" placeholder:text-slate h-10 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
                 >
-                  <option value=""> Select your relationship</option>
+                  <option value=""> Select your relationship with deceased</option>
                   {relations.map((n) => (
                     <option value={n} key={n}>
                       {n}
@@ -533,11 +470,16 @@ export default function SubmitPage() {
             <span className="flex flex-col mb-5 w-full">
               <FileUploadCardPractice
                 id="validId"
-                label="Marvelous"
+                label="Valid Id"
                 onFileSelect={(f) =>
                   setValue("validId", f as File, { shouldValidate: true })
                 }
               />
+              {errors.validId && (
+                <p className="text-clay text-xs mt-1">
+                  {errors.validId.message}
+                </p>
+              )}
             </span>
 
             <span className="flex flex-col mb-5 w-full border-b border-line pb-5">
@@ -566,14 +508,14 @@ export default function SubmitPage() {
                     legitimate family member of the deceased. I agree to{" "}
                     {"Ìrántí's"}{" "}
                     <a
-                      href="/terms_privacy/terms"
+                      href="/pages/terms_privacy/terms"
                       className="underline text-brass hover:text-slate"
                     >
                       terms of service
                     </a>{" "}
                     and{" "}
                     <a
-                      href="/terms_privacy/privacy"
+                      href="/pages/terms_privacy/privacy"
                       className="underline text-brass hover:text-slate"
                     >
                       privacy policy
@@ -591,6 +533,7 @@ export default function SubmitPage() {
             <button
             data-testid= 'Submit Button'
               type="submit"
+              disabled={!agreed}
               // onClick={() => setSuccessModal(true)}
               className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
             >
