@@ -2,16 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { nigerianStates, type NigerianState } from "./lib/data/states";
 import { FileText, Menu, Monitor, Shield, Users } from "lucide-react";
 
 export default function HomePage() {
   const [isMenuButtonOpen, setIsMenubuttonOpen] = useState(false);
-  const [naijaStates, setNaijaStates] = useState<NigerianState | "">("");
 
   return (
     <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
-      <nav className="bg-ink md:px-6 fixed w-full z-20 mb-20 border-b border-line">
+      <nav aria-label="Main" className="bg-ink md:px-6 fixed w-full z-20 mb-20 border-b border-line">
         <div className="p-2 flex flex-row justify-between items-center container">
           <div className="">
             <Image
@@ -34,7 +32,7 @@ export default function HomePage() {
               href="/pages/search"
               className=" bg-brass rounded-md py-2 px-3 text-ink border hover:text-parchment border-brass hover:border-ink hover:bg-ink-light text-xs"
             >
-              Search Records
+              Search Records first
             </Link>
             <Link
               href="/pages/submitMemorial"
