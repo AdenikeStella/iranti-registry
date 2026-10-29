@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FileUploadCardPractice } from "../../components/fileUploadPractice";
 import { relations } from "../../lib/data/relationship";
 import { formSchema, type FormValues, } from "./schema";
+import { FileUploadCard } from "@/app/components/fileUpload";
 
 
 
@@ -30,9 +31,10 @@ export default function SubmitPage() {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
+    mode: "onChange",
     defaultValues: { agreed: false },
   });
 
@@ -45,13 +47,14 @@ export default function SubmitPage() {
 
   const onSubmit = (data: FormValues) => {
     setapplicationData(data);
+    console.log(errors, isValid);
   };
 
   return (
-    <div className="flex flex-col p-0 m-0 min-h-screen md:max-w-full mx-auto overflow-hidden max-w-md">
+    <div className="">
       
 
-      <section className="flex flex-col md:px-10 px-2 justify-between bg-parchment font-mono mt-60 mx-auto md:max-w-190 min-h-screen w-full mb-6">
+      <section className="flex flex-col md:px-10 px-2 justify-between bg-parchment font-mono py-8 mt-20 mx-auto md:max-w-190 min-h-screen w-full mb-6">
         <div className="flex uppercase text-brass font-mono mb-5 text-xs px-3 md:text-sm text-center">
           Submit a memorial
         </div>
@@ -262,6 +265,7 @@ export default function SubmitPage() {
                 id="biography"
                 placeholder="A brief tribute — who they were, what they meant to people who loved them."
                 rows={6}
+                maxLength={2000}
                 {...register("biography")}
                 className="flex placeholder:text-slate h-40 rounded-md w-full border border-line ring-offset-ink px-3 py-2 file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50 md:text-sm file:border-0"
               />
@@ -453,7 +457,7 @@ export default function SubmitPage() {
             </div>
 
             <span className="flex flex-col mb-5 w-full">
-              <FileUploadCardPractice
+              <FileUploadCard
                 id="deathcert"
                 label="Death certificate"
                 onFileSelect={(f) =>
@@ -468,7 +472,7 @@ export default function SubmitPage() {
             </span>
 
             <span className="flex flex-col mb-5 w-full">
-              <FileUploadCardPractice
+              <FileUploadCard
                 id="validId"
                 label="Valid Id"
                 onFileSelect={(f) =>
@@ -483,7 +487,7 @@ export default function SubmitPage() {
             </span>
 
             <span className="flex flex-col mb-5 w-full border-b border-line pb-5">
-              <FileUploadCardPractice
+              <FileUploadCard
                 id="burialPermit"
                 label="Burial Permit"
                 onFileSelect={(f) =>
@@ -533,9 +537,9 @@ export default function SubmitPage() {
             <button
             data-testid= 'Submit Button'
               type="submit"
-              disabled={!agreed}
+              disabled={ !isValid }
               // onClick={() => setSuccessModal(true)}
-              className="btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md"
+              className={`btn-primary w-full text-parchment px-11 md:px-20 py-5 font-sans font-semibold pointer mt-2 text-base rounded-md disabled:bg-gray-300! disabled:cursor-not-allowed`}
             >
               Submit Memorial for Review
             </button>

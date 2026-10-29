@@ -116,7 +116,7 @@ export default function ViewMemorialPage() {
         
         <div>
           <Link
-            href="/search"
+            href="/pages/search"
             className="inline-flex items-center gap-1.5 mb-7 font-mono text-[0.65rem] uppercase tracking-widest text-slate hover:text-ink transition-colors"
           >
             <ArrowLeft />
