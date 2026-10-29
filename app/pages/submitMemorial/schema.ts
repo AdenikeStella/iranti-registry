@@ -8,15 +8,18 @@ export const formSchema = z.object({
   fullName: z
     .string()
     .min(1, "Full name is required")
+    .max(100, "Full name must be 100 characters or less")
     .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
   nee: z.string().regex(nameRegex, "...").optional().or(z.literal("")),
   applicantFullName: z
     .string()
     .min(1, "Your full name is required")
+    .max(100, "Full name must be 100 characters or less")
     .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
   careTakerName: z
     .string()
     .min(1, "caretaker name is required")
+    .max(100, "Full name must be 100 characters or less")
     .regex(nameRegex, "Name should only contain letters, spaces, and hyphens"),
   applicantEmail: z.string().email("invalid email address"),
   applicantPhoneNumber: z
@@ -42,16 +45,19 @@ export const formSchema = z.object({
   lga: z
     .string()
     .min(2, "LGA is required")
+    .max(100, "Full name must be 100 characters or less")
     .regex(nameRegex, "LGA should only contain letters, spaces and hyphens"),
   burialSite: z
     .string()
     .min(2, "Burial site is required")
+    .max(150, "Must be 150 characters or less")
     .regex(/^[a-zA-Z0-9\s,.'-]+$/, "Contains invalid characters"),
   stateOfDeath: z.string().min(1, "Select a state"),
   relationship: z.string().min(1, "Select your relationship"),
   biography: z
     .string()
     .min(1, "A short biography is required")
+    .max(500, "Biography must be 500 characters or less")
     .optional()
     .or(z.literal("")),
   agreed: z.boolean().refine((v) => v === true, {

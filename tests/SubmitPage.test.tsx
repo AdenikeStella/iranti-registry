@@ -6,7 +6,7 @@ const submitButton = () =>
   screen.getByRole("button", { name: /submit memorial for review/i });
 
 const makeFile = (name: string) =>
-  new File(["dummy"], name, { type: "application/pdf" });
+  new File(["mockFile"], name, { type: "application/pdf" });
 
 const getFileInputs = (container: HTMLElement) =>
   Array.from(container.querySelectorAll<HTMLInputElement>('input[type="file"]'));

@@ -64,13 +64,13 @@ export default function PagesLayout({
                         Home
                       </Link>
                       <Link
-                        href="/search"
+                        href="/pages/search"
                         className=" text-black border-b border-brass hover:bg-ink-light py-2"
                       >
                         Search Records
                       </Link>
                       <Link
-                        href="/submitMemorial"
+                        href="/pages/submitMemorial"
                         className=" text-black border-brass hover:bg-ink-light py-2"
                       >
                         Submit Memorial
@@ -95,13 +95,13 @@ export default function PagesLayout({
             <ul className="text-slate text-sm space-y-2">
               <li>
                 {" "}
-                <Link href="/#search" className="text-slate">
+                <Link href="/pages/search" className="text-slate">
                   Search Records
                 </Link>
               </li>
               <li>
                 {" "}
-                <Link href="/submitMemorial" className="text-slate">
+                <Link href="/pages/submitMemorial" className="text-slate">
                   Submit a Memorial
                 </Link>
               </li>
