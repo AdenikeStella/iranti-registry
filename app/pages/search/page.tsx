@@ -163,6 +163,7 @@ const [nameInput, setNameInput] = useState("");
               State
             </label>
             <select
+            aria-label="state of passing"
               id="state"
               value={naijaStates}
               onChange={(e) =>
@@ -185,6 +186,7 @@ const [nameInput, setNameInput] = useState("");
             </label>
             <div className="flex flex-col md:flex-row gap-2">
               <input
+              aria-label="year of passing from"
                 type="text"
                 inputMode="numeric"
                 maxLength={4}
